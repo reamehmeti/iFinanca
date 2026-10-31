@@ -1,0 +1,95 @@
+@iFinanca.API_HostAddress = https://localhost:7096
+
+# Write your own passwords here only on your computer; don't commit real passwords.
+@adminEmail = admin@ifinanca.local
+@adminPassword = your-admin-password
+@newUserPassword = your-new-user-password
+
+### Log in (stores the auth cookie)
+POST {{iFinanca.API_HostAddress}}/api/auth/login?useCookies=true
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+### Current user
+GET {{iFinanca.API_HostAddress}}/api/account/me
+
+### List users (Admin)
+GET {{iFinanca.API_HostAddress}}/api/admin/users
+
+### Create an Admin
+POST {{iFinanca.API_HostAddress}}/api/admin/users
+Content-Type: application/json
+
+{
+  "email": "admin2@ifinanca.local",
+  "password": "{{newUserPassword}}"
+}
+
+### Create a courier (account + Korrieri)
+POST {{iFinanca.API_HostAddress}}/api/admin/korrierat
+Content-Type: application/json
+
+{
+  "email": "arben@ifinanca.local",
+  "password": "{{newUserPassword}}",
+  "emri": "Arben",
+  "mbiemri": "Krasniqi",
+  "numriTelefonit": "044111222",
+  "posta": "Posta Prishtina",
+  "qyteti": "Prishtinë",
+  "targaEAutomjetit": "01-123-AB",
+  "aktiv": true
+}
+
+### List couriers
+GET {{iFinanca.API_HostAddress}}/api/admin/korrierat
+
+### Create a client (account + Klienti)
+POST {{iFinanca.API_HostAddress}}/api/admin/klientet
+Content-Type: application/json
+
+{
+  "email": "info@drita.al",
+  "password": "{{newUserPassword}}",
+  "emriIKompanise": "Drita SH.P.K.",
+  "personiPergjegjes": "Drita Berisha",
+  "adresa": "Rr. Nëna Terezë 10",
+  "qyteti": "Prishtinë",
+  "numriTelefonit": "038555666",
+  "nui": "811234567"
+}
+
+### List clients
+GET {{iFinanca.API_HostAddress}}/api/admin/klientet
+
+### List invoices (Admin: all; Courier/Client: only their own)
+GET {{iFinanca.API_HostAddress}}/api/faturat
+
+### Create an invoice (Admin)
+POST {{iFinanca.API_HostAddress}}/api/faturat
+Content-Type: application/json
+
+{
+  "klientiID": 1,
+  "korrieriID": 1,
+  "pershkrimi": "Dërgesë dokumentesh",
+  "cmimi": 25.00,
+  "statusi": "EKrijuar"
+}
+
+### Change the status (Admin, or the invoice's courier/client)
+PATCH {{iFinanca.API_HostAddress}}/api/faturat/1/statusi
+Content-Type: application/json
+
+{
+  "statusi": "NeDorezim"
+}
+
+### Download the invoice PDF
+GET {{iFinanca.API_HostAddress}}/api/faturat/1/pdf
+
+###
